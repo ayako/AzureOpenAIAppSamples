@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>しま〇ろうに聞いてみよう！</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css" />
+    <link rel="stylesheet" href="index.css" />
+  </head>
+
+  <body>
+    <header class="header">
+      <h1>しま〇ろうに聞いてみよう！</h1>
+    </header>
+
+    <section class="content">
+      <ul id="chat-area">
+        <li>
+          <div class="balloon">
+            <img class="img-circle" src="tiger.jpg" alt="image" />
+            <p class="talk">こんにちは！</p>
+          </div>
+        </li>
+        <li>
+          <div class="balloon">
+            <img class="img-circle" src="tiger.jpg" alt="image" />
+            <p class="talk">きいてみたいこと、わからないこと、きいてくれたらこたえるよ！</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <footer class="footer">
+      <input
+        id="msg-send"
+        class="msg-input"
+        type="text"
+        placeholder="メッセージ (Shift+Enterで送信)"
+      />
+      <button class="btn-submit" type="button" onclick="sendMessage()">
+        送信
+      </button>
+    </footer>
+
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>

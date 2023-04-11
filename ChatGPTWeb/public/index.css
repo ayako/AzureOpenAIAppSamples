@@ -1,0 +1,112 @@
+/* 最上部のタイトル */
+.header {
+  position: fixed;
+  top: 0;
+  z-index: 1;
+  width: 100%;
+  height: 50px;
+
+  font-size: 10px;
+  text-align: center;
+  line-height: 50px;
+
+  background-color: dimgray;
+  color: white;
+}
+
+/* メッセージ表示部 */
+.content {
+  width: 100%;
+  min-height: calc(100vh - 100px);
+
+  margin: 50px auto;
+  padding-top: 10px;
+
+  background-color: lightgray;
+
+}
+
+/* チャット表示部 */
+#chat-area {
+  overflow: scroll;
+  padding: 10px;
+
+  list-style: none;
+
+  /* スクロールバー非表示（IE,Edge）*/
+  -ms-overflow-style: none;
+  scrollbar-width: none;  
+
+}
+::-webkit-scrollbar{
+  /* スクロールバー非表示（Chrome,Safari）*/
+  display: none;
+}
+
+
+.balloon {
+  margin: 20px 0;
+  display: flex;
+  align-items: flex-start;
+}
+.balloon-r {
+  margin-right: 15px;
+  justify-content: flex-end;
+}
+
+.img-circle {
+  width: 50px;
+  height: 50px;
+
+  margin: 0 15px;
+  border-radius: 25px;
+
+  background-color: white;
+}
+
+.talk {
+  max-width: 500px;
+
+  padding: 10px;
+  border-radius: 10px;
+
+  background: white;
+}
+.talk-r {
+  background-color: skyblue;
+}
+
+/* 最下部のメッセージ入力・送信部 */
+.footer {
+  position: fixed;
+  z-index: 1;
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: white;
+}
+
+.msg-input {
+  width: 70%;
+
+  margin-right: 10px;
+  padding: 5px 15px;
+  border: 1px solid gray;
+  border-radius: 25px;
+
+  background-color: whitesmoke;
+}
+
+.btn-submit {
+  padding: 6px;
+  border: none;
+  border-radius: 5px;
+
+  background-color: deepskyblue;
+  color: white;
+}
