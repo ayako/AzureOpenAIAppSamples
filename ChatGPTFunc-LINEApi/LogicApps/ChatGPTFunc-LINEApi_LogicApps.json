@@ -1,0 +1,302 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "JSON_の解析_-_LINE_Message": {
+                "inputs": {
+                    "content": "@first(triggerBody()?['events'])",
+                    "schema": {
+                        "properties": {
+                            "deliveryContext": {
+                                "properties": {
+                                    "isRedelivery": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "message": {
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "text": {
+                                        "type": "string"
+                                    },
+                                    "type": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "mode": {
+                                "type": "string"
+                            },
+                            "replyToken": {
+                                "type": "string"
+                            },
+                            "source": {
+                                "properties": {
+                                    "type": {
+                                        "type": "string"
+                                    },
+                                    "userId": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "timestamp": {
+                                "type": "integer"
+                            },
+                            "type": {
+                                "type": "string"
+                            },
+                            "webhookEventId": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "runAfter": {},
+                "type": "ParseJson"
+            },
+            "条件": {
+                "actions": {
+                    "HTTP": {
+                        "inputs": {
+                            "body": {
+                                "messages": [
+                                    {
+                                        "text": "@first(body('JSON_の解析_-_AOAI_返答')?['choices'])['message']['content']",
+                                        "type": "text"
+                                    }
+                                ],
+                                "replyToken": "@body('JSON_の解析_-_LINE_Message')?['replyToken']"
+                            },
+                            "headers": {
+                                "Authorization": "Bearer YOUR_LINE_CHANNEL_ACCESS_TOKEN",
+                                "Content-Type": "application/json"
+                            },
+                            "method": "POST",
+                            "uri": "https://api.line.me/v2/bot/message/reply"
+                        },
+                        "runAfter": {
+                            "JSON_の解析_-_AOAI_返答": [
+                                "Succeeded"
+                            ]
+                        },
+                        "type": "Http"
+                    },
+                    "HTTP_-_AOAI_呼び出し": {
+                        "inputs": {
+                            "body": {
+                                "frequency_penalty": 0,
+                                "max_tokens": 800,
+                                "messages": [
+                                    {
+                                        "content": "あなたは「しまじろう」というキャラクターです。4-6歳の子供が分かるように話してください。挨拶、自己紹介はしないでください。また、口調は親切で親しみやすくしてください。",
+                                        "role": "system"
+                                    },
+                                    {
+                                        "content": "@body('JSON_の解析_-_LINE_Message')?['message']?['text']",
+                                        "role": "user"
+                                    },
+                                    {
+                                        "content": "",
+                                        "role": "assistant"
+                                    }
+                                ],
+                                "presence_penalty": 0,
+                                "stop": null,
+                                "temperature": 0.7,
+                                "top_p": 0.95
+                            },
+                            "headers": {
+                                "Content-Tuype": "application/json",
+                                "api-key": "YOUR_AOAI_KEY"
+                            },
+                            "method": "POST",
+                            "uri": "https://YOUR_AOAI_SERVICE_NAME.openai.azure.com/openai/deployments/gtp-35-turbo_202203/chat/completions?api-version=2023-03-15-preview"
+                        },
+                        "runAfter": {},
+                        "type": "Http"
+                    },
+                    "JSON_の解析_-_AOAI_返答": {
+                        "inputs": {
+                            "content": "@body('HTTP_-_AOAI_呼び出し')",
+                            "schema": {
+                                "properties": {
+                                    "choices": {
+                                        "items": {
+                                            "properties": {
+                                                "finish_reason": {
+                                                    "type": "string"
+                                                },
+                                                "index": {
+                                                    "type": "integer"
+                                                },
+                                                "message": {
+                                                    "properties": {
+                                                        "content": {
+                                                            "type": "string"
+                                                        },
+                                                        "role": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "required": [
+                                                "message",
+                                                "finish_reason",
+                                                "index"
+                                            ],
+                                            "type": "object"
+                                        },
+                                        "type": "array"
+                                    },
+                                    "created": {
+                                        "type": "integer"
+                                    },
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "model": {
+                                        "type": "string"
+                                    },
+                                    "object": {
+                                        "type": "string"
+                                    },
+                                    "usage": {
+                                        "properties": {
+                                            "completion_tokens": {
+                                                "type": "integer"
+                                            },
+                                            "prompt_tokens": {
+                                                "type": "integer"
+                                            },
+                                            "total_tokens": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "runAfter": {
+                            "HTTP_-_AOAI_呼び出し": [
+                                "Succeeded"
+                            ]
+                        },
+                        "type": "ParseJson"
+                    }
+                },
+                "expression": {
+                    "and": [
+                        {
+                            "contains": [
+                                "@body('JSON_の解析_-_LINE_Message')?['type']",
+                                "message"
+                            ]
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "JSON_の解析_-_LINE_Message": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "If"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "parameters": {},
+        "triggers": {
+            "manual": {
+                "inputs": {
+                    "schema": {
+                        "properties": {
+                            "destination": {
+                                "type": "string"
+                            },
+                            "events": {
+                                "items": {
+                                    "properties": {
+                                        "deliveryContext": {
+                                            "properties": {
+                                                "isRedelivery": {
+                                                    "type": "boolean"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string"
+                                                },
+                                                "text": {
+                                                    "type": "string"
+                                                },
+                                                "type": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "mode": {
+                                            "type": "string"
+                                        },
+                                        "replyToken": {
+                                            "type": "string"
+                                        },
+                                        "source": {
+                                            "properties": {
+                                                "type": {
+                                                    "type": "string"
+                                                },
+                                                "userId": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "timestamp": {
+                                            "type": "integer"
+                                        },
+                                        "type": {
+                                            "type": "string"
+                                        },
+                                        "webhookEventId": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "type",
+                                        "timestamp",
+                                        "source",
+                                        "mode",
+                                        "webhookEventId",
+                                        "deliveryContext"
+                                    ],
+                                    "type": "object"
+                                },
+                                "type": "array"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "kind": "Http",
+                "type": "Request"
+            }
+        }
+    },
+    "parameters": {}
+}
