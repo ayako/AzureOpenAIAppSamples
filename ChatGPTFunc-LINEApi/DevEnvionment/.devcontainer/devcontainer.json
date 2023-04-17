@@ -1,0 +1,16 @@
+{  
+  "name": "AOAI Handson, Azure Functions Python & Node.js",  
+  "dockerFile": "Dockerfile",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+            "ms-azuretools.vscode-azurefunctions",  
+            "ms-python.python",  
+            "dbaeumer.vscode-eslint"  
+        ]
+    }
+  },
+  "remoteUser": "vscode",  
+  "forwardPorts": [7071],  
+  "postCreateCommand": "echo 'Welcome to your Azure Functions dev container!'"  
+}  
