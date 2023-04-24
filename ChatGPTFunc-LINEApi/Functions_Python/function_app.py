@@ -9,7 +9,7 @@ openai.api_key = "YOUR_AOAI_KEY"
 
 import requests;
 lineapi_url = 'https://api.line.me/v2/bot/message/reply'
-lineapi_token = 'YOUR_LINE_API_TOKEN'
+lineapi_token = 'YOUR_LINE_API_CHANNEL_ACCESS_TOKEN'
 
 app = func.FunctionApp()
 

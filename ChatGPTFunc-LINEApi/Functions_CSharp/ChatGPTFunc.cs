@@ -20,7 +20,7 @@ namespace ChatGPTFunc_CSharp
         private static readonly string aoaiUrl = "https://YOUR_AOAI_SERVICE.openai.azure.com/";
         private static readonly string aoaiKey = "YOUR_AOAI_KEY";
         private static readonly string aoaiModelName = "YOUR_gtp-35-turbo_NAME";
-        private static readonly string lineApiToken = "YOUR_LINE_API_TOKEN";
+        private static readonly string lineApiToken = "YOUR_LINE_API_CHANNEL_ACCESS_TOKEN";
 
         private static readonly HttpClient _client;
         static ChatGPTFunc()

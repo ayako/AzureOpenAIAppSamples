@@ -1,7 +1,7 @@
 const aoai_url = 'https://YOUR_AOAI_SERVICE.openai.azure.com/openai/deployments/YOUR_gtp-35-turbo_NAME/chat/completions?api-version=2023-03-15-preview';
 const aoai_key = 'YOUR_AOAI_KEY';
 const lineapi_url = 'https://api.line.me/v2/bot/message/reply';
-const lineapi_token = 'YOUR_LINE_API_TOKEN';
+const lineapi_token = 'YOUR_LINE_API_CHANNEL_ACCESS_TOKEN';
 
 const util = require('util');
 const request = require('request');
